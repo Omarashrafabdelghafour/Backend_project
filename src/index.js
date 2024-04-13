@@ -19,7 +19,7 @@ app.post('/login', async (req, res) => {
       const user = await collection.findOne({ username });
 
       if (!user) {
-        return res.status(400).json({ error: 'Invalid username or password' });
+        return res.status(400).json({ error: 'Invalid username or password !' });
       }
 
       // Check if the password is valid
