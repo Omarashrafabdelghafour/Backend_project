@@ -12,28 +12,26 @@ app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Check if the credentials match the admin
     if (username === 'Admin_123' && password === 'Admin_123') {
-      // Redirect to the Admin page
-      return res.redirect('/admin');
+      res.redirect('/admin');
+    } else {
+      // Check if the user exists
+      const user = await collection.findOne({ username });
+
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid username or password' });
+      }
+
+      // Check if the password is valid
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(400).json({ error: 'Invalid username or password' });
+      }
+
+      // Authentication successful for regular users
+      res.json({ message: 'Login successful' });
     }
-
-    // Check if the user exists
-    const user = await collection.findOne({ username });
-
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
-
-    // Check if the password is valid
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
-
-    // Authentication successful for regular users
-    res.json({ message: 'Login successful' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
