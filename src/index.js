@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
 // Admin page route
 app.get('/Admin', (req, res) => {
  
-  res.send('Welcome to the Admin page');
+  res.send('Welcome at the Admin page');
 });
 app.post('/Admin',authpage(["Admin_123","Admin_123"]),(req,res)=>{
 
